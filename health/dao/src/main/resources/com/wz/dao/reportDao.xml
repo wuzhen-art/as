@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wz.dao.ReportDao">
+    <select id="queryAccount" parameterType="String" resultType="int">
+        select count(*) from t_member where regTime &lt;= #{month}
+
+    </select>
+
+    <select id="getMealReport" resultType="map">
+        SELECT t_setmeal.name,COUNT(t_order.id) value FROM t_setmeal LEFT OUTER JOIN t_order ON t_setmeal.id = t_order.setmeal_id GROUP BY t_setmeal.name
+
+    </select>
+
+    <select id="getHotSetmeal" resultType="map">
+        SELECT t_setmeal.name,COUNT(t_order.id) setmeal_count,count(t_order.id)/(select count(id) from t_order) proportion
+        FROM t_setmeal LEFT OUTER JOIN t_order ON t_setmeal.id = t_order.setmeal_id GROUP BY t_setmeal.name
+        order by setmeal_count desc limit 0,4;
+
+
+    </select>
+</mapper>

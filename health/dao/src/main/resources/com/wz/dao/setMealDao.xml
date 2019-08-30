@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wz.dao.SetMealDao">
+    <select id="findPagesByCondition" parameterType="String" resultType="SetMeal">
+          select * from t_setmeal
+          <where>
+              <if test="value!=null and value.length > 0">
+                   and name like "%"#{value}"%" or code = #{value} or helpCode = #{value}
+
+              </if>
+          </where>
+
+    </select>
+
+    <insert id="add" parameterType="Setmeal">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_setmeal values(null,#{name},#{code},
+        #{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+
+
+    </insert>
+
+    <resultMap id="mealAndGroup" type="SetMeal">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="price" property="price"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+        <result column="img" property="img"/>
+        <collection property="checkGroups" column="id" ofType="CheckGroup"
+                    select="com.wz.dao.CheckGroupDao.findCheckGroupBySetMealId"/>
+
+    </resultMap>
+
+
+
+
+    <select id="getSetMealById" parameterType="int" resultMap="mealAndGroup">
+        select * from t_setmeal where id = #{id}
+    </select>
+
+    <update id="edit" parameterType="setMeal">
+        update  t_setmeal
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+
+            <if test="code != null">
+                code = #{code},
+            </if>
+
+            <if test="helpCode != null">
+                helpCode = #{helpCode},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+
+            <if test="remark  != null">
+                remark = #{remark},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+
+            <if test="img != null">
+                img = #{img},
+            </if>
+        </set>
+        where id = #{id}
+
+    </update>
+
+
+
+
+
+
+</mapper>

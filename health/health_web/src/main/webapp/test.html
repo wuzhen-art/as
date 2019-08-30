@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vue.js"></script>
+    <link rel="stylesheet" href="plugins/elementui/index.css">
+    <script src="plugins/elementui/index.js"></script>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/jquery.min.js"></script>
+
+
+
+</head>
+<body>
+
+
+<div id="app">
+    <template>
+        <div class="block">
+            <span class="demonstration">默认</span>
+            <el-date-picker
+                    v-model="value1"
+                    type="date"
+                    placeholder="选择日期">
+            </el-date-picker>
+
+            <el-date-picker
+                    v-model="value2"
+                    align="right"
+                    type="date"
+
+                    placeholder="选择日期">
+            </el-date-picker>
+
+            <el-button @click = "submitResult()" type="success" plain>提交日期</el-button>
+        </div>
+    </template>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    var vue = new Vue({
+        el: '#app',
+        data:{
+            value1: '',
+            value2: ''
+
+        },
+
+        methods: {
+            submitResult() {
+
+                axios.get("/report/getMemberReport.do?begin="+this.value1+"&end="+this.value2).then((res) => {
+
+                })
+            }
+        }
+    }
+    )
+
+</script>
+
+
+
+
+
+</html>

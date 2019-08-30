@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--packageScanning-->
+    <!--jobOnTime bean-->
+    <!--proxy,invoking-->
+    <!--Crontrigger-->
+    <!--schedule-->
+
+    <context:annotation-config></context:annotation-config>
+    <!--<context:component-scan base-package="com.wz.timers"/>-->
+
+    <bean id="jobDemo" class="com.wz.timers.JobOnTime"/>
+
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+         <property name="targetObject" ref="jobDemo"/>
+         <property name="targetMethod" value="clearImg"/>
+    </bean>
+
+    <bean id="myTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail"/>
+
+        <property name="cronExpression">
+            <value>0 0/2 * * * ?</value>
+        </property>
+
+    </bean>
+
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="myTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+
+
+
+
+
+
+
+</beans>

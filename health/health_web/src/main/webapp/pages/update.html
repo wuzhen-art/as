@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+</head>
+
+<body>
+
+            <form class="modifyPwd-form">
+                    <div class="modifyPwd-item model-select-item resetPwd">
+                        <label >旧密码</label>
+                        <input id="oldPassword" name="oldPassword" th:placeholder="#{user.modify.oldPasswd}" type="password" class="resetPwd-form-input input-field  modifyPwd-form-input"/>
+                    </div>
+                    <div class="modifyPwd-item  model-select-item resetPwd">
+                        <label >新密码</label>
+                        <input id="newPassword" name="newPassword" th:placeholder="#{user.modify.newPasswd}" type="password" class="resetPwd-form-input input-field modifyPwd-form-input"/>
+                        <b th:text="#{passwordRole}">密码8-12位，含数字、大小写字母中任意两种及以上
+                        </b>
+                    </div>
+                    <div class="modifyPwd-item model-select-item resetPwd">
+                        <label th:inline="text">验证密码</label>
+                        <input id="repeatPassword"  th:placeholder="#{user.modify.secondNewPasswd}" type="password" class="resetPwd-form-input input-field modifyPwd-form-input"/>
+                        <b th:text="#{passwordRole}">密码8-12位含数字、大小写字母、特殊字符两种及以上
+                        </b>
+                    </div>
+
+                <div class="modifyPass-btn">
+                    <input type="button" value="提交"  onclick = "modifyPwdSumbit()" class="modifyPwd-save-btn"/>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        $(".resetPwd-form-input").blur(function () {
+            $(this).removeClass("error-tip")
+        })
+    </script>
+</div>
+</body>
+
+<script>
+    function modifyPwdSumbit(){
+        if($('#oldPassword').val()==""){
+            alert('原始密码为空');
+            return
+        }
+        if($('#newPassword').val()==""){
+            alert('新密码为空');
+            return
+        }
+        if($('#repeatPassword').val()==""){
+            alert('确认密码为空');
+            return
+        }
+        var data={
+            'oldPassword':$('#oldPassword').val(),
+            'newPassword':$('#newPassword').val(),
+            'repeatPassword':$('#repeatPassword').val()
+        }
+
+
+        $.ajax({
+            type:"POST",
+            url:"user/modifyPwd",
+            dataType:"json",
+            contentType:"application/json",
+            data:JSON.stringify(data),
+            success:function(res){
+                console.log(res)
+                if(res.code == 200){
+                    alert(res.msg)
+                    showModifyPwdPage()
+                }
+            }
+        });
+    }
+</script>
+</html>
+

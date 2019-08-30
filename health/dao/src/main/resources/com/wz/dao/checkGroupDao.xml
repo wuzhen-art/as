@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wz.dao.CheckGroupDao">
+
+    <select id="showPagesByKeyWords" parameterType="String" resultType="CheckGroup">
+          select * from t_checkgroup
+          <where>
+              <if test="value != null and value.length > 0">
+              and code = #{value} or name = #{value} or helpCode = #{value}
+              </if>
+          </where>
+
+    </select>
+
+    <insert id="add" parameterType="checkGroup">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+          insert into t_checkgroup values(null,#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+
+    </insert>
+
+    <update id="edit" parameterType="CheckGroup">
+        update  t_checkgroup
+        <set>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="helpCode != null">
+                helpCode = #{helpCode},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+        </set>
+        where id = #{id}
+
+    </update>
+
+
+    <resultMap id="getCheckGroup" type="CheckGroup">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+
+        <collection property="checkItems" ofType="checkItem" column="id"
+                    select="com.wz.dao.CheckItemDao.findByGroupId"></collection>
+
+    </resultMap>
+
+
+
+    <select id="findCheckGroupBySetMealId" parameterType="int" resultMap="getCheckGroup">
+        select * from t_checkgroup where id in (select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{id} )
+    </select>
+
+</mapper>
