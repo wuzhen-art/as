@@ -33,6 +33,7 @@ public class CheckGroupServiceImp implements CheckGroupService {
     public void add(CheckGroup checkGroup, int[] checkitemIds) {
         checkGroupDao.add(checkGroup);
         setCheckGroupAndCheckItem(checkGroup.getId(),checkitemIds);
+        System.out.println("dgfga");
 
 
     }
